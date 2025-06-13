@@ -141,6 +141,16 @@ export default function DashboardPage() {
             <div className="mb-4 text-sm text-gray-700">
               <span className="font-semibold">Summary:</span> {selectedCall.call_analysis?.call_summary || "-"}
             </div>
+            <div className="mb-4">
+              {selectedCall.recording_url ? (
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="font-semibold text-gray-800">Recording:</span>
+                  <audio controls src={selectedCall.recording_url} className="w-full max-w-xs" />
+                </div>
+              ) : (
+                <div className="text-xs text-gray-400 mb-2">No recording available.</div>
+              )}
+            </div>
             <div className="mb-2 font-semibold text-gray-800">Transcript:</div>
             <pre className="whitespace-pre-wrap text-xs bg-gray-50 rounded p-3 border border-gray-100 max-h-[60vh] overflow-y-auto">
               {selectedCall.transcript || "No transcript available."}
