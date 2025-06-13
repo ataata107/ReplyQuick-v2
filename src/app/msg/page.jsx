@@ -706,24 +706,46 @@ export default function ChatPage() {
         </div>
       </main>
       {/* Customer Conversations Pane */}
-      {/* <div className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4">
-        <h3 className="font-semibold mb-2 text-zinc-700 dark:text-zinc-200">Customer Conversations</h3>
+      <div className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4 max-h-[40vh] overflow-y-auto">
+        <h3 className="font-semibold mb-4 text-zinc-700 dark:text-zinc-200">Customer Conversations</h3>
         {loadingCustomers ? (
           <div>Loading...</div>
         ) : customerConversations.length === 0 ? (
           <div className="text-zinc-500">No customer conversations found.</div>
         ) : (
-          <ul className="divide-y divide-zinc-100 dark:divide-zinc-800">
-            {customerConversations.map(conv => (
-              <li key={conv.number} className="py-2 flex flex-col">
-                <span className="font-medium text-zinc-900 dark:text-zinc-100">{conv.number}</span>
-                <span className="text-sm text-zinc-500 truncate">{conv.latest.body}</span>
-                <span className="text-xs text-zinc-400">{new Date(conv.latest.dateCreated).toLocaleString()}</span>
-              </li>
-            ))}
-          </ul>
+          customerConversations.map(conv => (
+            <div key={conv.number} className="mb-6">
+              <div className="font-medium text-zinc-900 dark:text-zinc-100 mb-2">{conv.number}</div>
+              <div className="flex flex-col gap-2">
+                {conv.messages
+                  .sort((a, b) => new Date(a.dateCreated) - new Date(b.dateCreated))
+                  .map((msg, idx) => {
+                    const isMe = msg.from === OUR_NUMBER;
+                    return (
+                      <div
+                        key={msg.id || idx}
+                        className={`flex ${isMe ? "justify-end" : "justify-start"}`}
+                      >
+                        <div
+                          className={`px-3 py-2 rounded-2xl max-w-[70%] text-[15px] leading-relaxed
+                            ${isMe
+                              ? "bg-blue-600 text-white rounded-tr-sm"
+                              : "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 rounded-tl-sm"
+                            }`}
+                        >
+                          <div className="whitespace-pre-wrap break-words">{msg.body}</div>
+                          <div className="text-[11px] opacity-70 text-right mt-1">
+                            {new Date(msg.dateCreated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          ))
         )}
-      </div> */}
+      </div>
     </div>
   );
 }
