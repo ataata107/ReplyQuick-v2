@@ -7,13 +7,12 @@ export async function POST(req) {
 
         // Use provided numbers or fallback to defaults
         const from_number = body.from_number;
-        const to_number = body.to_number;
+        // const to_number = body.to_number;
 
         const payload = {
             sort_order: "descending",
             filter_criteria: {
-                from_number,
-                to_number,
+                from_number
             },
         };
 

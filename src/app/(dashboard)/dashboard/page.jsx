@@ -59,8 +59,7 @@ export default function DashboardPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          from_number: ["+19412717374"],
-          to_number: ["+919511510494"]
+          from_number: ["+19412717374"]
         }),
       });
       const data = await res.json();
