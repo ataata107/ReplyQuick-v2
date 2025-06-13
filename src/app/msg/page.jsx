@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { FixedSizeList as List } from 'react-window';
 import { base } from "@/lib/airtable";
+import { useRef } from "react";
 
 export default function ChatPage() {
   const [selectedContact, setSelectedContact] = useState(null);
@@ -20,6 +21,40 @@ export default function ChatPage() {
   const [smsMessages, setSmsMessages] = useState([]);
   const [whatsappMessages, setWhatsappMessages] = useState([]);
   const [emailMessages, setEmailMessages] = useState([]);
+  const OUR_NUMBER = "+19412717374"; // Replace with your number if needed
+
+  const [customerConversations, setCustomerConversations] = useState([]);
+  const [loadingCustomers, setLoadingCustomers] = useState(true);
+
+  useEffect(() => {
+    async function fetchCustomerConversations() {
+      setLoadingCustomers(true);
+      try {
+        const res = await fetch(`/api/sms/getSmsAgent?number=${encodeURIComponent(OUR_NUMBER)}`);
+        const data = await res.json();
+        if (data.success) {
+          // Group by customer number
+          const grouped = {};
+          data.messages.forEach(msg => {
+            const customerNumber = msg.from === OUR_NUMBER ? msg.to : msg.from;
+            if (!grouped[customerNumber]) grouped[customerNumber] = [];
+            grouped[customerNumber].push(msg);
+          });
+          // Convert to array and sort by latest message
+          const convArr = Object.entries(grouped).map(([number, msgs]) => ({
+            number,
+            latest: msgs.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated))[0],
+            messages: msgs
+          })).sort((a, b) => new Date(b.latest.dateCreated) - new Date(a.latest.dateCreated));
+          setCustomerConversations(convArr);
+        }
+      } catch (e) {
+        setCustomerConversations([]);
+      }
+      setLoadingCustomers(false);
+    }
+    fetchCustomerConversations();
+  }, []);
 
   const handleSendMessage = async () => {
     if (!message.trim() || !selectedContact) return;
@@ -670,6 +705,25 @@ export default function ChatPage() {
           )}
         </div>
       </main>
+      {/* Customer Conversations Pane */}
+      <div className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4">
+        <h3 className="font-semibold mb-2 text-zinc-700 dark:text-zinc-200">Customer Conversations</h3>
+        {loadingCustomers ? (
+          <div>Loading...</div>
+        ) : customerConversations.length === 0 ? (
+          <div className="text-zinc-500">No customer conversations found.</div>
+        ) : (
+          <ul className="divide-y divide-zinc-100 dark:divide-zinc-800">
+            {customerConversations.map(conv => (
+              <li key={conv.number} className="py-2 flex flex-col">
+                <span className="font-medium text-zinc-900 dark:text-zinc-100">{conv.number}</span>
+                <span className="text-sm text-zinc-500 truncate">{conv.latest.body}</span>
+                <span className="text-xs text-zinc-400">{new Date(conv.latest.dateCreated).toLocaleString()}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }

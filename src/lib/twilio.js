@@ -163,24 +163,22 @@ export const getSMSHistory = async (phoneNumber) => {
 }; 
 
 // Get SMS Conversation History
-export const getSmsConversationHistory = async (numberA, numberB) => {
+export const getSmsConversationHistory = async (number) => {
   try {
-    // Fetch messages sent from A to B
-    const messagesFromAToB = await client.messages.list({
-      from: numberA,
-      to: numberB,
-      limit: 50
+    // Fetch messages sent from the number
+    const sentMessages = await client.messages.list({
+      from: number,
+      limit: 100
     });
 
-    // Fetch messages sent from B to A
-    const messagesFromBToA = await client.messages.list({
-      from: numberB,
-      to: numberA,
-      limit: 50
+    // Fetch messages sent to the number
+    const receivedMessages = await client.messages.list({
+      to: number,
+      limit: 100
     });
 
     // Combine and sort by dateCreated
-    const allMessages = [...messagesFromAToB, ...messagesFromBToA].sort(
+    const allMessages = [...sentMessages, ...receivedMessages].sort(
       (a, b) => new Date(a.dateCreated) - new Date(b.dateCreated)
     );
 
