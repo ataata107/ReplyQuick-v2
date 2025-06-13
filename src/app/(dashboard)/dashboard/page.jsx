@@ -102,7 +102,6 @@ export default function DashboardPage() {
                       <th className="px-4 py-3 text-left font-semibold text-gray-700">To</th>
                       <th className="px-4 py-3 text-left font-semibold text-gray-700">Summary</th>
                       <th className="px-4 py-3 text-left font-semibold text-gray-700">Name</th>
-                      <th className="px-4 py-3 text-left font-semibold text-gray-700">Email</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-100">
@@ -136,7 +135,6 @@ export default function DashboardPage() {
                             {call.call_analysis?.call_summary || "-"}
                           </td>
                           <td className="px-4 py-2 whitespace-nowrap">{name}</td>
-                          <td className="px-4 py-2 whitespace-nowrap">{email}</td>
                         </tr>
                       );
                     })}
