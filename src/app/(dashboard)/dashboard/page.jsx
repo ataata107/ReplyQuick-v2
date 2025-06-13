@@ -137,7 +137,7 @@ export default function DashboardPage() {
                           </td>
                           <td className="px-4 py-2 whitespace-nowrap">{name}</td>
                           <td className="px-4 py-2 whitespace-nowrap">
-                            {call.call_successful ? "Yes" : "No"}
+                            {call.call_analysis?.call_successful ? "Yes" : "No"}
                           </td>
                         </tr>
                       );
