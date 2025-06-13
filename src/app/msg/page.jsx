@@ -708,7 +708,7 @@ export default function ChatPage() {
           )}
         </div>
 
-        <div className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-0 max-h-[40vh] flex overflow-hidden">
+        <div className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-0 h-[40vh] flex overflow-hidden">
           {/* Customer Numbers List */}
           <div className="w-1/4 min-w-[180px] border-r border-zinc-200 dark:border-zinc-800 overflow-y-auto">
             <h3 className="font-semibold px-4 py-3 text-zinc-700 dark:text-zinc-200 border-b border-zinc-200 dark:border-zinc-800">
@@ -727,7 +727,10 @@ export default function ChatPage() {
                       ? "bg-primary/10 font-semibold text-primary"
                       : "hover:bg-muted/80"
                   }`}
-                  onClick={() => setSelectedCustomer(conv)}
+                  onClick={() => {
+                    console.log("Selected customer:", conv);
+                    setSelectedCustomer(conv);
+                  }}
                 >
                   {conv.number}
                 </div>
@@ -735,7 +738,7 @@ export default function ChatPage() {
             )}
           </div>
           {/* Chat History */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto bg-white dark:bg-zinc-950">
             {selectedCustomer ? (
               <div className="p-4 space-y-2">
                 <div className="font-semibold mb-2 text-zinc-900 dark:text-zinc-100">{selectedCustomer.number}</div>
