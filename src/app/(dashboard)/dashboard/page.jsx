@@ -85,8 +85,12 @@ export default function DashboardPage() {
                       <tr
                         key={call.call_id}
                         className={
-                          (idx % 2 === 0 ? "bg-white" : "bg-gray-50 hover:bg-gray-100") +
-                          (selectedCall?.call_id === call.call_id ? " ring-2 ring-blue-400" : " cursor-pointer")
+                          (selectedCall?.call_id === call.call_id
+                            ? "bg-blue-50 ring-2 ring-blue-400"
+                            : idx % 2 === 0
+                              ? "bg-white"
+                              : "bg-gray-50 hover:bg-gray-100 cursor-pointer"
+                          )
                         }
                         onClick={() => setSelectedCall(call)}
                       >
