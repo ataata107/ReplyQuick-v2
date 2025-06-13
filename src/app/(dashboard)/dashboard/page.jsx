@@ -59,46 +59,54 @@ export default function DashboardPage() {
       <div className="space-y-6 sm:space-y-8">
         <InsightsChart />
         <LeadsList />
-      </div>
-
-      <div>
-        <h2 className="text-lg font-semibold mb-2">Call Logs</h2>
-        {logsLoading ? (
-          <div>Loading call logs...</div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full border text-sm">
-              <thead>
-                <tr>
-                  <th className="border px-2 py-1">Date/Time</th>
-                  <th className="border px-2 py-1">Duration (sec)</th>
-                  <th className="border px-2 py-1">From</th>
-                  <th className="border px-2 py-1">To</th>
-                  <th className="border px-2 py-1">Summary</th>
-                </tr>
-              </thead>
-              <tbody>
-                {callLogs.map((call) => (
-                  <tr key={call.call_id}>
-                    <td className="border px-2 py-1">
-                      {call.start_timestamp
-                        ? new Date(call.start_timestamp).toLocaleString()
-                        : "-"}
-                    </td>
-                    <td className="border px-2 py-1">
-                      {call.call_cost?.total_duration_seconds ?? Math.round((call.duration_ms || 0) / 1000)}
-                    </td>
-                    <td className="border px-2 py-1">{call.from_number}</td>
-                    <td className="border px-2 py-1">{call.to_number}</td>
-                    <td className="border px-2 py-1">
-                      {call.call_analysis?.call_summary || "-"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* Call Logs Section */}
+        <section>
+          <h2 className="text-lg font-semibold mb-4 text-gray-800">Call Logs</h2>
+          <div className="bg-white rounded-lg shadow border border-gray-200">
+            {logsLoading ? (
+              <div className="p-6 text-center text-gray-500">Loading call logs...</div>
+            ) : callLogs.length === 0 ? (
+              <div className="p-6 text-center text-gray-500">No call logs found.</div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 text-sm">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-semibold text-gray-700">Date/Time</th>
+                      <th className="px-4 py-3 text-left font-semibold text-gray-700">Duration (sec)</th>
+                      <th className="px-4 py-3 text-left font-semibold text-gray-700">From</th>
+                      <th className="px-4 py-3 text-left font-semibold text-gray-700">To</th>
+                      <th className="px-4 py-3 text-left font-semibold text-gray-700">Summary</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-100">
+                    {callLogs.map((call, idx) => (
+                      <tr
+                        key={call.call_id}
+                        className={idx % 2 === 0 ? "bg-white" : "bg-gray-50 hover:bg-gray-100"}
+                      >
+                        <td className="px-4 py-2 whitespace-nowrap">
+                          {call.start_timestamp
+                            ? new Date(call.start_timestamp).toLocaleString()
+                            : "-"}
+                        </td>
+                        <td className="px-4 py-2 whitespace-nowrap">
+                          {call.call_cost?.total_duration_seconds ??
+                            Math.round((call.duration_ms || 0) / 1000)}
+                        </td>
+                        <td className="px-4 py-2 whitespace-nowrap">{call.from_number}</td>
+                        <td className="px-4 py-2 whitespace-nowrap">{call.to_number}</td>
+                        <td className="px-4 py-2 max-w-xs truncate" title={call.call_analysis?.call_summary}>
+                          {call.call_analysis?.call_summary || "-"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
-        )}
+        </section>
       </div>
     </div>
   );
