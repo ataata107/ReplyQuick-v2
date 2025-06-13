@@ -25,6 +25,7 @@ export default function ChatPage() {
 
   const [customerConversations, setCustomerConversations] = useState([]);
   const [loadingCustomers, setLoadingCustomers] = useState(true);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
 
   useEffect(() => {
     async function fetchCustomerConversations() {
@@ -714,38 +715,65 @@ export default function ChatPage() {
           <div className="text-zinc-500">No customer conversations found.</div>
         ) : (
           customerConversations.map(conv => (
-            <div key={conv.number} className="mb-6">
+            <div
+              key={conv.number}
+              className={`mb-6 cursor-pointer rounded-lg p-2 transition-colors ${
+                selectedCustomer?.number === conv.number
+                  ? "bg-primary/10"
+                  : "hover:bg-zinc-100 dark:hover:bg-zinc-800"
+              }`}
+              onClick={() => setSelectedCustomer(conv)}
+            >
               <div className="font-medium text-zinc-900 dark:text-zinc-100 mb-2">{conv.number}</div>
-              <div className="flex flex-col gap-2">
-                {conv.messages
-                  .sort((a, b) => new Date(a.dateCreated) - new Date(b.dateCreated))
-                  .map((msg, idx) => {
-                    const isMe = msg.from === OUR_NUMBER;
-                    return (
-                      <div
-                        key={msg.id || idx}
-                        className={`flex ${isMe ? "justify-end" : "justify-start"}`}
-                      >
-                        <div
-                          className={`px-3 py-2 rounded-2xl max-w-[70%] text-[15px] leading-relaxed
-                            ${isMe
-                              ? "bg-blue-600 text-white rounded-tr-sm"
-                              : "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 rounded-tl-sm"
-                            }`}
-                        >
-                          <div className="whitespace-pre-wrap break-words">{msg.body}</div>
-                          <div className="text-[11px] opacity-70 text-right mt-1">
-                            {new Date(msg.dateCreated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+              <div className="text-sm text-zinc-500 truncate">
+                {conv.latest?.body}
               </div>
             </div>
           ))
         )}
       </div>
+      {selectedCustomer && (
+        <div className="fixed inset-0 md:static md:col-span-9 flex flex-col h-screen bg-zinc-50 dark:bg-zinc-900 z-50">
+          <div className="flex-none px-6 py-4 bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+            <div>
+              <h2 className="font-semibold text-zinc-900 dark:text-zinc-100">
+                {selectedCustomer.number}
+              </h2>
+            </div>
+            <Button size="sm" onClick={() => setSelectedCustomer(null)}>
+              Close
+            </Button>
+          </div>
+          <div className="flex-1 overflow-y-auto">
+            <div className="flex flex-col p-4 space-y-4">
+              {selectedCustomer.messages
+                .sort((a, b) => new Date(a.dateCreated) - new Date(b.dateCreated))
+                .map((msg, idx) => {
+                  const isMe = msg.from === OUR_NUMBER;
+                  return (
+                    <div
+                      key={msg.id || idx}
+                      className={`flex ${isMe ? "justify-end" : "justify-start"}`}
+                    >
+                      <div
+                        className={`px-3 py-2 rounded-2xl max-w-[70%] text-[15px] leading-relaxed
+                          ${isMe
+                            ? "bg-blue-600 text-white rounded-tr-sm"
+                            : "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 rounded-tl-sm"
+                          }`}
+                      >
+                        <div className="whitespace-pre-wrap break-words">{msg.body}</div>
+                        <div className="text-[11px] opacity-70 text-right mt-1">
+                          {new Date(msg.dateCreated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
