@@ -708,9 +708,9 @@ export default function ChatPage() {
           )}
         </div>
 
-        <div className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-0 h-[40vh] flex overflow-hidden">
+        <div className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-0 h-[40vh] flex">
           {/* Customer Numbers List */}
-          <div className="w-1/4 min-w-[180px] border-r border-zinc-200 dark:border-zinc-800 overflow-y-auto">
+          <div className="min-w-[180px] max-w-[250px] w-[220px] border-r border-zinc-200 dark:border-zinc-800 overflow-y-auto">
             <h3 className="font-semibold px-4 py-3 text-zinc-700 dark:text-zinc-200 border-b border-zinc-200 dark:border-zinc-800">
               Customers
             </h3>
