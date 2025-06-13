@@ -161,3 +161,47 @@ export const getSMSHistory = async (phoneNumber) => {
     };
   }
 }; 
+
+// Get SMS Conversation History
+export const getSmsConversationHistory = async (numberA, numberB) => {
+  try {
+    // Fetch messages sent from A to B
+    const messagesFromAToB = await client.messages.list({
+      from: numberA,
+      to: numberB,
+      limit: 50
+    });
+
+    // Fetch messages sent from B to A
+    const messagesFromBToA = await client.messages.list({
+      from: numberB,
+      to: numberA,
+      limit: 50
+    });
+
+    // Combine and sort by dateCreated
+    const allMessages = [...messagesFromAToB, ...messagesFromBToA].sort(
+      (a, b) => new Date(a.dateCreated) - new Date(b.dateCreated)
+    );
+
+    return {
+      success: true,
+      messages: allMessages.map(msg => ({
+        id: msg.sid,
+        body: msg.body,
+        status: msg.status,
+        direction: msg.direction,
+        from: msg.from,
+        to: msg.to,
+        dateCreated: msg.dateCreated,
+        dateUpdated: msg.dateUpdated
+      }))
+    };
+  } catch (error) {
+    console.error('Error fetching conversation history:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+};
