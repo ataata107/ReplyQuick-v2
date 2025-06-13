@@ -4,6 +4,23 @@ import { LeadsList } from '@/components/dashboard/LeadsList';
 import { useEffect, useState } from 'react';
 import { RxAvatar } from "react-icons/rx";
 
+function extractNameEmail(transcript) {
+  if (!transcript) return { name: "-", email: "-" };
+
+  // Match name (e.g., "Your name is M-u-d-i-t")
+  const nameMatch = transcript.match(/Your name is ([A-Za-z\-]+)/i);
+  let name = nameMatch ? nameMatch[1].replace(/-/g, "") : "-";
+
+  // Match email (e.g., "your email is m-u-d-i-t-r-a-j-p-u-t-p-e-r-s-o-n-a-l at gmail.com")
+  const emailMatch = transcript.match(/your email is ([a-zA-Z\-]+) at ([a-zA-Z0-9.\-]+)\.([a-zA-Z]{2,})/i);
+  let email = "-";
+  if (emailMatch) {
+    email = emailMatch[1].replace(/-/g, "") + "@" + emailMatch[2] + "." + emailMatch[3];
+  }
+
+  return { name, email };
+}
+
 export default function DashboardPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -78,38 +95,45 @@ export default function DashboardPage() {
                       <th className="px-4 py-3 text-left font-semibold text-gray-700">From</th>
                       <th className="px-4 py-3 text-left font-semibold text-gray-700">To</th>
                       <th className="px-4 py-3 text-left font-semibold text-gray-700">Summary</th>
+                      <th className="px-4 py-3 text-left font-semibold text-gray-700">Name</th>
+                      <th className="px-4 py-3 text-left font-semibold text-gray-700">Email</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-100">
-                    {callLogs.map((call, idx) => (
-                      <tr
-                        key={call.call_id}
-                        className={
-                          (selectedCall?.call_id === call.call_id
-                            ? "bg-blue-50 ring-2 ring-blue-400"
-                            : idx % 2 === 0
-                              ? "bg-white"
-                              : "bg-gray-50 hover:bg-gray-100 cursor-pointer"
-                          )
-                        }
-                        onClick={() => setSelectedCall(call)}
-                      >
-                        <td className="px-4 py-2 whitespace-nowrap">
-                          {call.start_timestamp
-                            ? new Date(call.start_timestamp).toLocaleString()
-                            : "-"}
-                        </td>
-                        <td className="px-4 py-2 whitespace-nowrap">
-                          {call.call_cost?.total_duration_seconds ??
-                            Math.round((call.duration_ms || 0) / 1000)}
-                        </td>
-                        <td className="px-4 py-2 whitespace-nowrap">{call.from_number}</td>
-                        <td className="px-4 py-2 whitespace-nowrap">{call.to_number}</td>
-                        <td className="px-4 py-2 max-w-xs truncate" title={call.call_analysis?.call_summary}>
-                          {call.call_analysis?.call_summary || "-"}
-                        </td>
-                      </tr>
-                    ))}
+                    {callLogs.map((call, idx) => {
+                      const { name, email } = extractNameEmail(call.transcript);
+                      return (
+                        <tr
+                          key={call.call_id}
+                          className={
+                            (selectedCall?.call_id === call.call_id
+                              ? "bg-blue-50 ring-2 ring-blue-400"
+                              : idx % 2 === 0
+                                ? "bg-white"
+                                : "bg-gray-50 hover:bg-gray-100 cursor-pointer"
+                            )
+                          }
+                          onClick={() => setSelectedCall(call)}
+                        >
+                          <td className="px-4 py-2 whitespace-nowrap">
+                            {call.start_timestamp
+                              ? new Date(call.start_timestamp).toLocaleString()
+                              : "-"}
+                          </td>
+                          <td className="px-4 py-2 whitespace-nowrap">
+                            {call.call_cost?.total_duration_seconds ??
+                              Math.round((call.duration_ms || 0) / 1000)}
+                          </td>
+                          <td className="px-4 py-2 whitespace-nowrap">{call.from_number}</td>
+                          <td className="px-4 py-2 whitespace-nowrap">{call.to_number}</td>
+                          <td className="px-4 py-2 max-w-xs truncate" title={call.call_analysis?.call_summary}>
+                            {call.call_analysis?.call_summary || "-"}
+                          </td>
+                          <td className="px-4 py-2 whitespace-nowrap">{name}</td>
+                          <td className="px-4 py-2 whitespace-nowrap">{email}</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
