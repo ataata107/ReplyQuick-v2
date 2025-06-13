@@ -151,13 +151,21 @@ export default function DashboardPage() {
         <div className="fixed right-0 top-0 h-full w-full sm:w-[400px] md:w-[500px] lg:w-[600px] max-w-full bg-white border-l border-gray-200 shadow-lg z-50 overflow-y-auto transition-all">
           <div className="flex justify-between items-center px-6 py-4 border-b">
             <h3 className="text-lg font-semibold">Call Transcript</h3>
-            <button
-              className="text-gray-500 hover:text-gray-700 text-xl"
-              onClick={() => setSelectedCall(null)}
-              aria-label="Close"
-            >
-              &times;
-            </button>
+            <div className="flex gap-2">
+              <button
+                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
+                onClick={() => window.location.href = '/messages'}
+              >
+                Open Chat
+              </button>
+              <button
+                className="text-gray-500 hover:text-gray-700 text-xl"
+                onClick={() => setSelectedCall(null)}
+                aria-label="Close"
+              >
+                &times;
+              </button>
+            </div>
           </div>
           <div className="px-6 py-4">
             <div className="mb-2 text-xs text-gray-500">
