@@ -740,33 +740,36 @@ export default function ChatPage() {
           {/* Chat History */}
           <div className="flex-1 overflow-y-auto bg-white dark:bg-zinc-950">
             {selectedCustomer ? (
-              <div className="p-4 space-y-2">
-                <div className="font-semibold mb-2 text-zinc-900 dark:text-zinc-100">{selectedCustomer.number}</div>
-                {selectedCustomer.messages
-                  .sort((a, b) => new Date(a.dateCreated) - new Date(b.dateCreated))
-                  .map((msg, idx) => {
-                    const isMe = msg.from === OUR_NUMBER;
-                    return (
-                      <div
-                        key={msg.id || idx}
-                        className={`flex ${isMe ? "justify-end" : "justify-start"}`}
-                      >
+              <>
+                {console.log("selectedCustomer", selectedCustomer)}
+                <div className="p-4 space-y-2">
+                  <div className="font-semibold mb-2 text-zinc-900 dark:text-zinc-100">{selectedCustomer.number}</div>
+                  {selectedCustomer.messages
+                    .sort((a, b) => new Date(a.dateCreated) - new Date(b.dateCreated))
+                    .map((msg, idx) => {
+                      const isMe = msg.from === OUR_NUMBER;
+                      return (
                         <div
-                          className={`px-3 py-2 rounded-2xl max-w-[70%] text-[15px] leading-relaxed
-                            ${isMe
-                              ? "bg-blue-600 text-white rounded-tr-sm"
-                              : "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 rounded-tl-sm"
-                            }`}
+                          key={msg.id || idx}
+                          className={`flex ${isMe ? "justify-end" : "justify-start"}`}
                         >
-                          <div className="whitespace-pre-wrap break-words">{msg.body}</div>
-                          <div className="text-[11px] opacity-70 text-right mt-1">
-                            {new Date(msg.dateCreated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          <div
+                            className={`px-3 py-2 rounded-2xl max-w-[70%] text-[15px] leading-relaxed
+                              ${isMe
+                                ? "bg-blue-600 text-white rounded-tr-sm"
+                                : "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 rounded-tl-sm"
+                              }`}
+                          >
+                            <div className="whitespace-pre-wrap break-words">{msg.body}</div>
+                            <div className="text-[11px] opacity-70 text-right mt-1">
+                              {new Date(msg.dateCreated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
-              </div>
+                      );
+                    })}
+                </div>
+              </>
             ) : (
               <div className="flex items-center justify-center h-full text-zinc-500">
                 Select a customer to view conversation
