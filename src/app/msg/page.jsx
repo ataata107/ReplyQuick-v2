@@ -444,7 +444,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-white dark:bg-zinc-950">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 overflow-y-auto">
       <main className="flex flex-col md:grid md:grid-cols-12 h-full">
         {/* Contact List - Left Sidebar */}
         <div className="w-full md:col-span-3 border-r border-zinc-200 dark:border-zinc-800">
@@ -706,7 +706,7 @@ export default function ChatPage() {
         </div>
       </main>
       {/* Customer Conversations Pane */}
-      <div className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4 max-h-[40vh] overflow-y-auto">
+      <div className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4 max-h-[70vh] overflow-y-auto">
         <h3 className="font-semibold mb-4 text-zinc-700 dark:text-zinc-200">Customer Conversations</h3>
         {loadingCustomers ? (
           <div>Loading...</div>
