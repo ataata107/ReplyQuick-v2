@@ -240,6 +240,35 @@ export default function DashboardPage() {
               )}
             </div>
           </div>
+          {/* Name & Email at the bottom of the side panel */}
+          <div className="mt-8 border-t pt-4">
+            {(() => {
+              let name = "-";
+              let email = "-";
+              if (selectedCall.transcript_object && selectedCall.transcript_object.length > 0) {
+                for (const turn of selectedCall.transcript_object) {
+                  if (turn.role === "user" && turn.content) {
+                    const extracted = extractNameEmail(turn.content);
+                    if (extracted.name !== "-" || extracted.email !== "-") {
+                      name = extracted.name;
+                      email = extracted.email;
+                      break;
+                    }
+                  }
+                }
+              } else if (selectedCall.transcript) {
+                const extracted = extractNameEmail(selectedCall.transcript);
+                name = extracted.name;
+                email = extracted.email;
+              }
+              return (
+                <div>
+                  <div className="text-xs text-gray-500"><span className="font-semibold">Name:</span> {name}</div>
+                  <div className="text-xs text-gray-500"><span className="font-semibold">Email:</span> {email}</div>
+                </div>
+              );
+            })()}
+          </div>
         </div>
       )}
     </div>
