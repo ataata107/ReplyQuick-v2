@@ -21,6 +21,12 @@ function extractNameEmail(transcript) {
   return { name, email };
 }
 
+function parseTranscript(transcript) {
+  if (!transcript) return [];
+  // Split by newlines, filter out empty lines
+  return transcript.split('\n').map(line => line.trim()).filter(Boolean);
+}
+
 export default function DashboardPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -176,9 +182,32 @@ export default function DashboardPage() {
               )}
             </div>
             <div className="mb-2 font-semibold text-gray-800">Transcript:</div>
-            <pre className="whitespace-pre-wrap text-xs bg-gray-50 rounded p-3 border border-gray-100 max-h-[60vh] overflow-y-auto">
-              {selectedCall.transcript || "No transcript available."}
-            </pre>
+            <div className="max-h-[60vh] overflow-y-auto space-y-2">
+              {parseTranscript(selectedCall.transcript).length === 0 ? (
+                <div className="text-xs text-gray-400">No transcript available.</div>
+              ) : (
+                parseTranscript(selectedCall.transcript).map((line, idx) => (
+                  <div
+                    key={idx}
+                    className={
+                      "flex " +
+                      (idx % 2 === 0 ? "justify-start" : "justify-end")
+                    }
+                  >
+                    <div
+                      className={
+                        "rounded-lg px-4 py-2 text-xs max-w-[80%] " +
+                        (idx % 2 === 0
+                          ? "bg-blue-100 text-blue-900"
+                          : "bg-green-100 text-green-900")
+                      }
+                    >
+                      {line}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
       )}
