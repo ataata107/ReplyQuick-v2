@@ -9,6 +9,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [callLogs, setCallLogs] = useState([]);
   const [logsLoading, setLogsLoading] = useState(true);
+  const [selectedCall, setSelectedCall] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -83,7 +84,11 @@ export default function DashboardPage() {
                     {callLogs.map((call, idx) => (
                       <tr
                         key={call.call_id}
-                        className={idx % 2 === 0 ? "bg-white" : "bg-gray-50 hover:bg-gray-100"}
+                        className={
+                          (idx % 2 === 0 ? "bg-white" : "bg-gray-50 hover:bg-gray-100") +
+                          (selectedCall?.call_id === call.call_id ? " ring-2 ring-blue-400" : " cursor-pointer")
+                        }
+                        onClick={() => setSelectedCall(call)}
                       >
                         <td className="px-4 py-2 whitespace-nowrap">
                           {call.start_timestamp
@@ -108,6 +113,37 @@ export default function DashboardPage() {
           </div>
         </section>
       </div>
+      {selectedCall && (
+        <div className="fixed right-0 top-0 h-full w-full sm:w-[400px] md:w-[500px] lg:w-[600px] max-w-full bg-white border-l border-gray-200 shadow-lg z-50 overflow-y-auto transition-all">
+          <div className="flex justify-between items-center px-6 py-4 border-b">
+            <h3 className="text-lg font-semibold">Call Transcript</h3>
+            <button
+              className="text-gray-500 hover:text-gray-700 text-xl"
+              onClick={() => setSelectedCall(null)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+          </div>
+          <div className="px-6 py-4">
+            <div className="mb-2 text-xs text-gray-500">
+              <span className="font-semibold">From:</span> {selectedCall.from_number} <br />
+              <span className="font-semibold">To:</span> {selectedCall.to_number} <br />
+              <span className="font-semibold">Date:</span>{" "}
+              {selectedCall.start_timestamp
+                ? new Date(selectedCall.start_timestamp).toLocaleString()
+                : "-"}
+            </div>
+            <div className="mb-4 text-sm text-gray-700">
+              <span className="font-semibold">Summary:</span> {selectedCall.call_analysis?.call_summary || "-"}
+            </div>
+            <div className="mb-2 font-semibold text-gray-800">Transcript:</div>
+            <pre className="whitespace-pre-wrap text-xs bg-gray-50 rounded p-3 border border-gray-100 max-h-[60vh] overflow-y-auto">
+              {selectedCall.transcript || "No transcript available."}
+            </pre>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
