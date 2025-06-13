@@ -706,7 +706,7 @@ export default function ChatPage() {
         </div>
       </main>
       {/* Customer Conversations Pane */}
-      <div className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4">
+      {/* <div className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4">
         <h3 className="font-semibold mb-2 text-zinc-700 dark:text-zinc-200">Customer Conversations</h3>
         {loadingCustomers ? (
           <div>Loading...</div>
@@ -723,7 +723,7 @@ export default function ChatPage() {
             ))}
           </ul>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }
