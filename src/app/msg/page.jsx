@@ -31,6 +31,11 @@ function ChatPageContent() {
   const [loadingCustomers, setLoadingCustomers] = useState(true);
 
   useEffect(() => {
+    if (chatNumber) {
+      setViewMode("customers");
+    }
+  }, [chatNumber]);
+  useEffect(() => {
     if (chatNumber && customerConversations.length > 0) {
       const found = customerConversations.find(
         (conv) => conv.number === chatNumber
