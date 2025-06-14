@@ -743,12 +743,14 @@ export default function ChatPage() {
               <>
                 {console.log("selectedCustomer", selectedCustomer)}
                 <div className="p-4 space-y-2">
+                  <div>DEBUG: {selectedCustomer.messages.length} messages</div>
                   <div className="font-semibold mb-2 text-zinc-900 dark:text-zinc-100">{selectedCustomer.number}</div>
                   {selectedCustomer.messages?.length > 0 ? (
                     selectedCustomer.messages
                       .sort((a, b) => new Date(a.dateCreated) - new Date(b.dateCreated))
                       .map((msg, idx) => {
                         const isMe = msg.from === OUR_NUMBER;
+                        console.log('msg', msg, 'isMe', isMe, 'OUR_NUMBER', OUR_NUMBER);
                         return (
                           <div key={msg.id || idx} className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
                             <div className={`px-3 py-2 rounded-2xl max-w-[70%] text-[15px] leading-relaxed
