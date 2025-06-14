@@ -744,7 +744,6 @@ export default function ChatPage() {
               {console.log("selectedCustomer", selectedCustomer)}
               <div className="p-4 space-y-2">
                 
-                <div className="font-semibold mb-2 text-zinc-900 dark:text-zinc-100">{selectedCustomer.number}</div>
                 {selectedCustomer.messages?.length > 0 ? (
                   selectedCustomer.messages
                     .sort((a, b) => new Date(a.dateCreated) - new Date(b.dateCreated))
