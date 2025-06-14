@@ -750,7 +750,7 @@ function ChatPageContent() {
               .map(conv => (
                 <div
                   key={conv.number}
-                  className={`px-4 py-2 cursor-pointer truncate ${
+                  className={`flex items-center gap-3 px-4 py-2 cursor-pointer truncate ${
                     selectedCustomer?.number === conv.number
                       ? "bg-primary/10 font-semibold text-primary"
                       : "hover:bg-muted/80"
