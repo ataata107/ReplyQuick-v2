@@ -759,7 +759,11 @@ function ChatPageContent() {
                     setSelectedCustomer(conv);
                   }}
                 >
-                  {conv.number}
+                  {/* Initials Circle */}
+                  <div className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-100 font-bold text-sm">
+                    MA
+                  </div>
+                  <span className="truncate">{conv.number}</span>
                 </div>
               ))
           )}
