@@ -8,12 +8,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Mail, MessageSquare, Phone, Search, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { Suspense } from "react";
 import { FixedSizeList as List } from 'react-window';
 import { base } from "@/lib/airtable";
 import { useRef } from "react";
 import { useSearchParams } from "next/navigation"; // Add this import
 
-export default function ChatPage() {
+function ChatPageContent() {
   const [selectedContact, setSelectedContact] = useState(null);
   const [message, setMessage] = useState("");
   const [contacts, setContacts] = useState([]);
@@ -792,5 +793,13 @@ export default function ChatPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ChatPageContent />
+    </Suspense>
   );
 }
