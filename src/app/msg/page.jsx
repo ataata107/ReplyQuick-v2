@@ -11,6 +11,7 @@ import { toast } from "react-hot-toast";
 import { FixedSizeList as List } from 'react-window';
 import { base } from "@/lib/airtable";
 import { useRef } from "react";
+import { useSearchParams } from "next/navigation"; // Add this import
 
 export default function ChatPage() {
   const [selectedContact, setSelectedContact] = useState(null);
@@ -25,9 +26,21 @@ export default function ChatPage() {
   const [viewMode, setViewMode] = useState("contacts"); // "contacts" or "customers"
   const OUR_NUMBER = "+19412717374"; // Replace with your number if needed
 
+  const searchParams = useSearchParams();
+  const chatNumber = searchParams.get("number");
+
   const [customerConversations, setCustomerConversations] = useState([]);
   const [loadingCustomers, setLoadingCustomers] = useState(true);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+
+  useEffect(() => {
+    if (chatNumber && customerConversations.length > 0) {
+      const found = customerConversations.find(
+        (conv) => conv.number === chatNumber
+      );
+      if (found) setSelectedCustomer(found);
+    }
+  }, [chatNumber, customerConversations]);
 
   useEffect(() => {
     async function fetchCustomerConversations() {
