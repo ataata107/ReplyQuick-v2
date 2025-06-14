@@ -772,7 +772,13 @@ function ChatPageContent() {
         <div className="flex-1 overflow-y-auto bg-white dark:bg-zinc-950">
           {selectedCustomer ? (
             <>
-              {console.log("selectedCustomer", selectedCustomer)}
+              {/* Header with Initials and Number */}
+              <div className="flex items-center gap-3 px-4 py-3 border-b border-zinc-200 dark:border-zinc-800">
+                <div className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-100 font-bold text-sm">
+                  MA
+                </div>
+                <span className="font-medium text-zinc-900 dark:text-zinc-100">{selectedCustomer.number}</span>
+              </div>
               <div className="p-4 space-y-2">
                 
                 {selectedCustomer.messages?.length > 0 ? (
