@@ -589,21 +589,15 @@ function ChatPageContent() {
               <div className="flex-none p-4 bg-white dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800">
                 <div className="flex items-center gap-3">
                   <Input
-                    placeholder="Type a SMS message..."
+                    placeholder="Sending is disabled in customer view"
                     value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    className="h-11 bg-zinc-50 dark:bg-zinc-900 border-none focus-visible:ring-1 focus-visible:ring-zinc-200 dark:focus-visible:ring-zinc-800 rounded-xl"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSendMessage();
-                      }
-                    }}
+                    disabled
+                    className="h-11 bg-zinc-50 dark:bg-zinc-900 border-none focus-visible:ring-1 focus-visible:ring-zinc-200 dark:focus-visible:ring-zinc-800 rounded-xl opacity-60"
                   />
                   <Button
                     size="icon"
-                    className="h-11 w-11 bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-zinc-200 dark:text-zinc-900 rounded-xl"
-                    onClick={handleSendMessage}
+                    className="h-11 w-11 bg-zinc-300 dark:bg-zinc-800 text-zinc-400 rounded-xl cursor-not-allowed"
+                    disabled
                   >
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                       <path d="M18.3333 1.66667L9.16667 10.8333M18.3333 1.66667L12.5 18.3333L9.16667 10.8333M18.3333 1.66667L1.66667 7.5L9.16667 10.8333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
