@@ -23,6 +23,7 @@ function ChatPageContent() {
   const [smsMessages, setSmsMessages] = useState([]);
   const [whatsappMessages, setWhatsappMessages] = useState([]);
   const [emailMessages, setEmailMessages] = useState([]);
+  const [customerSearch, setCustomerSearch] = useState("");
   
   const [viewMode, setViewMode] = useState("contacts"); // "contacts" or "customers"
   const OUR_NUMBER = "+19412717374"; // Replace with your number if needed
@@ -724,31 +725,42 @@ function ChatPageContent() {
       </main>
       <div className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-0 h-[40vh] flex">
         {/* Customer Numbers List */}
-        <div className="min-w-[180px] max-w-[250px] w-[220px] border-r border-zinc-200 dark:border-zinc-800 overflow-y-auto">
+        <div className="min-w-[290px] max-w-[300px] w-[220px] border-r border-zinc-200 dark:border-zinc-800 overflow-y-auto">
           <h3 className="font-semibold px-4 py-3 text-zinc-700 dark:text-zinc-200 border-b border-zinc-200 dark:border-zinc-800">
             Customers
           </h3>
+          <div className="px-4 py-2">
+            <Input
+              placeholder="Search customers..."
+              value={customerSearch}
+              onChange={e => setCustomerSearch(e.target.value)}
+              className="h-9 bg-muted/50 border-none focus-visible:ring-2 focus-visible:ring-primary/20 rounded-lg"
+            />
+          </div>
           {loadingCustomers ? (
             <div className="p-4">Loading...</div>
           ) : customerConversations.length === 0 ? (
             <div className="p-4 text-zinc-500">No customer conversations found.</div>
           ) : (
-            customerConversations.map(conv => (
-              <div
-                key={conv.number}
-                className={`px-4 py-2 cursor-pointer truncate ${
-                  selectedCustomer?.number === conv.number
-                    ? "bg-primary/10 font-semibold text-primary"
-                    : "hover:bg-muted/80"
-                }`}
-                onClick={() => {
-                  console.log("Selected customer:", conv);
-                  setSelectedCustomer(conv);
-                }}
-              >
-                {conv.number}
-              </div>
-            ))
+            customerConversations
+              .filter(conv =>
+                conv.number.toLowerCase().includes(customerSearch.toLowerCase())
+              )
+              .map(conv => (
+                <div
+                  key={conv.number}
+                  className={`px-4 py-2 cursor-pointer truncate ${
+                    selectedCustomer?.number === conv.number
+                      ? "bg-primary/10 font-semibold text-primary"
+                      : "hover:bg-muted/80"
+                  }`}
+                  onClick={() => {
+                    setSelectedCustomer(conv);
+                  }}
+                >
+                  {conv.number}
+                </div>
+              ))
           )}
         </div>
         {/* Chat History */}
