@@ -729,12 +729,13 @@ function ChatPageContent() {
           <h3 className="font-semibold px-4 py-3 text-zinc-700 dark:text-zinc-200 border-b border-zinc-200 dark:border-zinc-800">
             Customers
           </h3>
-          <div className="px-4 py-2">
+          <div className="px-4 py-2 relative">
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search customers..."
               value={customerSearch}
               onChange={e => setCustomerSearch(e.target.value)}
-              className="h-9 bg-muted/50 border-none focus-visible:ring-2 focus-visible:ring-primary/20 rounded-lg"
+              className="pl-10 h-9 bg-muted/50 border-none focus-visible:ring-2 focus-visible:ring-primary/20 rounded-lg"
             />
           </div>
           {loadingCustomers ? (
